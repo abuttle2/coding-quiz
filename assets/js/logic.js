@@ -8,7 +8,7 @@ let choicesEl = document.getElementById("choices");
 var timerEl = document.getElementById("time");
 
 let isComplete = false;
-var currentQuestion = 0;
+var currentQuestion;
 let timer;
 let timerCount = 30;
 
@@ -27,16 +27,16 @@ let startTimer = function () {
             }
         }
         if (timerCount === 0) {
-            // Clears interval when timer is 0.
+            // Clears interval when timer is 
             clearInterval(timer);
             isComplete = true;
         }
     }, 1000);
 }
 
-//Monitor click events for the start button
 let startQuiz = function () {
     //Remove start screen onClick and unhide the questions
+    currentQuestion = 0;
     startTimer();
     isComplete = false;
     startScreen.remove();
@@ -55,12 +55,12 @@ let displayQuestions = function (questionsArr) {
 
             for (let j = 0; j < questionsArr[i].choices.length; j++) {
                 let btnEl = document.createElement("button");
-                btnEl.textContent = j + 1 + ". " + questionsArr[i].choices[j];
+                btnEl.textContent = questionsArr[i].choices[j];
                 choicesEl.appendChild(btnEl);
                 choiceButtons.push(btnEl);
 
-                btnEl.addEventListener("click", function (event) {
-                    event.target.style.color = "salmon";
+                btnEl.addEventListener("click", function () {
+                    // event.target.style.color = "salmon";
                     currentQuestion++;
                     console.log(currentQuestion);
 
@@ -75,6 +75,18 @@ let displayQuestions = function (questionsArr) {
                     else {
                         questionsTitleEl.textContent = '';
                     }
+
+                    let checkAnswer = function () {
+                        //Compare strings to check for correct answer
+                        if (btnEl.textContent.toLowerCase() === questionsArr[i].answer.toLowerCase()) {
+                            console.log("Correct");
+                        }
+                        else {
+                            console.log("Incorrect");
+                        }
+                    }
+
+                    checkAnswer();
                 });
             }
         }
