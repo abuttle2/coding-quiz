@@ -22,7 +22,3 @@ let questions = [
         //TODO: Validate all based on lower case strings with .toLowerCase just in case
     },
 ]
-
-let quiz = {
-
-}

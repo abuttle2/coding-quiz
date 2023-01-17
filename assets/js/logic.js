@@ -5,22 +5,49 @@ let questionsTitleEl = document.getElementById("question-title");
 let endScreenEl = document.getElementById("end-screen");
 let feedbackEl = document.getElementById("feedback");
 let choicesEl = document.getElementById("choices");
+var timerEl = document.getElementById("time");
+
+let isComplete = false;
+var currentQuestion = 0;
+let timer;
+let timerCount = 30;
+
+let startTimer = function () {
+    // Sets timer which will call invoke every second
+    timer = setInterval(function () {
+        timerCount--;
+        timerEl.textContent = timerCount;
+
+        if (timerCount >= 0) {
+            // Tests if win condition is met
+            if (isComplete && timerCount > 0) {
+                // Clears interval and stops timer
+                clearInterval(timer);
+                winGame();
+            }
+        }
+        if (timerCount === 0) {
+            // Clears interval when timer is 0.
+            clearInterval(timer);
+            isComplete = true;
+        }
+    }, 1000);
+}
 
 //Monitor click events for the start button
 let startQuiz = function () {
     //Remove start screen onClick and unhide the questions
+    startTimer();
+    isComplete = false;
     startScreen.remove();
     questionsEl.setAttribute("class", "show");
     displayQuestions(questions);
 }
 
-
-var currentQuestion = 0;
-var choiceButtons = [];
-
 let displayQuestions = function (questionsArr) {
     // Loop through the questions and dynamically update text based on an index variable.
     //So we can push each generated button to the array and process later
+    var choiceButtons = [];
 
     for (let i = 0; i < questionsArr.length; i++) {
         if (i === currentQuestion) {
@@ -37,12 +64,16 @@ let displayQuestions = function (questionsArr) {
                     currentQuestion++;
                     console.log(currentQuestion);
 
+                    // Clear choices when the next question is loaded
                     for (var k = 0; k < choiceButtons.length; k++) {
                         choiceButtons[k].remove();
                     }
 
                     if (currentQuestion < questionsArr.length) {
                         displayQuestions(questions);
+                    }
+                    else {
+                        questionsTitleEl.textContent = '';
                     }
                 });
             }
