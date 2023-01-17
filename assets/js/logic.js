@@ -11,34 +11,44 @@ let startQuiz = function () {
     //Remove start screen onClick and unhide the questions
     startScreen.remove();
     questionsEl.setAttribute("class", "show");
-    displayQuestions();
+    displayQuestions(questions);
 }
 
 
 var currentQuestion = 0;
+var choiceButtons = [];
 
-let displayQuestions = function () {
+let displayQuestions = function (questionsArr) {
     // Loop through the questions and dynamically update text based on an index variable.
-    for (let i = 0; i < questions.length; i++) {
-        if (i === currentQuestion) {
-            questionsTitleEl.textContent = questions[i].question;
+    //So we can push each generated button to the array and process later
 
-            for (let j = 0; j < questions[i].choices.length; j++) {
+    for (let i = 0; i < questionsArr.length; i++) {
+        if (i === currentQuestion) {
+            questionsTitleEl.textContent = questionsArr[i].question;
+
+            for (let j = 0; j < questionsArr[i].choices.length; j++) {
                 let btnEl = document.createElement("button");
-                btnEl.textContent = j + 1 + ". " + questions[i].choices[j];
+                btnEl.textContent = j + 1 + ". " + questionsArr[i].choices[j];
                 choicesEl.appendChild(btnEl);
+                choiceButtons.push(btnEl);
 
                 btnEl.addEventListener("click", function (event) {
                     event.target.style.color = "salmon";
                     currentQuestion++;
-                    displayQuestions();
+                    console.log(currentQuestion);
+
+                    for (var k = 0; k < choiceButtons.length; k++) {
+                        choiceButtons[k].remove();
+                    }
+
+                    if (currentQuestion < questionsArr.length) {
+                        displayQuestions(questions);
+                    }
                 });
             }
         }
     }
 }
-
-
 
 
 // switch (currentQuestion) {
