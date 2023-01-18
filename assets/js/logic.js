@@ -7,10 +7,12 @@ let feedbackEl = document.getElementById("feedback");
 let choicesEl = document.getElementById("choices");
 var timerEl = document.getElementById("time");
 
-let isComplete = false;
 var currentQuestion;
 let timer;
-let timerCount = 30;
+let timerCount = 45;
+
+const correctAudio = document.getElementById("correctAudio");
+const incorrectAudio = document.getElementById("incorrectAudio");
 
 let startTimer = function () {
     // Sets timer which will call invoke every second
@@ -23,13 +25,11 @@ let startTimer = function () {
             if (isComplete && timerCount > 0) {
                 // Clears interval and stops timer
                 clearInterval(timer);
-                winGame();
             }
         }
         if (timerCount === 0) {
             // Clears interval when timer is 
             clearInterval(timer);
-            isComplete = true;
         }
     }, 1000);
 }
@@ -42,6 +42,13 @@ let startQuiz = function () {
     startScreen.remove();
     questionsEl.setAttribute("class", "show");
     displayQuestions(questions);
+}
+
+let endQuiz = function () {
+    //Stop timer and clear element
+    timerCount = 0;
+    var timerParEl = document.querySelector(".timer");
+    timerParEl.textContent = '';
 }
 
 let displayQuestions = function (questionsArr) {
@@ -74,15 +81,22 @@ let displayQuestions = function (questionsArr) {
                     }
                     else {
                         questionsTitleEl.textContent = '';
+                        endQuiz();
                     }
 
                     let checkAnswer = function () {
                         //Compare strings to check for correct answer
                         if (btnEl.textContent.toLowerCase() === questionsArr[i].answer.toLowerCase()) {
                             console.log("Correct");
+                            currentScore += timerCount / 2;
+                            console.log("Score: " + currentScore);
+                            correctAudio.play();
                         }
                         else {
                             console.log("Incorrect");
+                            currentScore -= 10;
+                            console.log("Score: " + currentScore);
+                            incorrectAudio.play();
                         }
                     }
 
@@ -93,21 +107,4 @@ let displayQuestions = function (questionsArr) {
     }
 }
 
-
-// switch (currentQuestion) {
-//     case 0:
-//         break;
-//     case 1:
-//         break;
-//     case 2:
-//         break;
-//     case 3:
-//         break;
-
 startBtn.addEventListener("click", startQuiz);
-
-// var buttons = document.getElementById('button');
-
-// addEventListener("click", function () {
-
-// })

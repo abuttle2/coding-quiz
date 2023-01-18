@@ -1,0 +1,1 @@
+let currentScore = 0;
