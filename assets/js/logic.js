@@ -14,6 +14,8 @@ let timerCount = 30;
 const correctAudio = document.getElementById("correctAudio");
 const incorrectAudio = document.getElementById("incorrectAudio");
 
+var answerMessage = '';
+
 let startTimer = function () {
     // Sets timer which will call invoke every second
     timer = setInterval(function () {
@@ -39,6 +41,10 @@ let startQuiz = function () {
     startScreen.remove();
     questionsEl.setAttribute("class", "show");
     displayQuestions(questions, currentQuestion);
+
+
+    answerMessage = document.createElement("p");
+    feedbackEl.appendChild(answerMessage);
 }
 
 let endQuiz = function () {
@@ -98,16 +104,17 @@ let displayQuestions = function (questionsArr, questionIndex) {
             }
 
             let checkAnswer = function () {
-                feedbackEl.setAttribute("class", "feedback");
-                let feedbackTxt = document.createElement("p");
                 //Set attribute to show feedback for answers
                 //Hide after X number of seconds.
+                feedbackEl.setAttribute("class", "feedback");
+
                 setTimeout(function () {
                     feedbackEl.setAttribute("class", "feedback hide");
-                }, 3000);
+                }, 1500);
 
                 if (btnEl.textContent.toLowerCase() == questionsArr[questionIndex].answer.toLowerCase()) {
                     updateScore(true);
+                    answerMessage.textContent = "Correct!";
 
                     //TODO: For the end screen, change the class for this element to be "show" and setup an event listener on the submit button (id = "submit" & is a child of end-screen);
 
@@ -120,6 +127,7 @@ let displayQuestions = function (questionsArr, questionIndex) {
                 }
                 else {
                     updateScore(false);
+                    answerMessage.textContent = "Wrong!";
                 }
             }
 
