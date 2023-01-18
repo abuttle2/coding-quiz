@@ -18,7 +18,5 @@ let questions = [
         question: "Arrays in JavaScript can be used to store ______.",
         choices: ["numbers and strings", "other arrays", "booleans", "all of the above"],
         answer: "all of the above"
-
-        //TODO: Validate all based on lower case strings with .toLowerCase just in case
     },
 ]
