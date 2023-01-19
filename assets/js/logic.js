@@ -16,6 +16,13 @@ let timerCount = 3;
 
 var answerMessage = '';
 
+
+var lastInitials = localStorage.getItem("initials");
+var lastScore = localStorage.getItem("score");
+
+console.log("Loaded last initials: " + lastInitials);
+console.log("Loaded last score: " + lastScore);
+
 // let displaySubmit = function () {
 //     console.log("Function has been called");
 
@@ -57,7 +64,7 @@ let startQuiz = function () {
 }
 
 let submit = function () {
-    let errorTxt = document.createElement("p");
+    let validationTxt = document.createElement("p");
 
     submitBtn.addEventListener("click", function () {
         var userInitials = document.getElementsByTagName("input")[0].value;
@@ -65,13 +72,24 @@ let submit = function () {
         // TODO: Get the current value of the text box for the players initials once submit has been entered
         if (userInitials !== "" && userInitials.length <= 3) {
             console.log(userInitials);
-            errorTxt.textContent = "";
+            validationTxt.textContent = "Data has been submitted!";
+            validationTxt.setAttribute("class", "success");
+            endScreenEl.appendChild(validationTxt);
+
+            setTimeout(function () {
+                validationTxt.textContent = "";
+            }, 1000);
+            //Store in local storage if the input is valid.
+            localStorage.setItem("initials", userInitials);
+            localStorage.setItem("score", currentScore);
         }
         else {
-            errorTxt.textContent = "Please provide initials";
-            errorTxt.setAttribute("class", "error");
-            endScreenEl.appendChild(errorTxt);
+            validationTxt.textContent = "Please provide valid initials!";
+            validationTxt.setAttribute("class", "error");
+            endScreenEl.appendChild(validationTxt);
         }
+
+
     });
 }
 
@@ -85,7 +103,7 @@ let endQuiz = function () {
     timerParEl.textContent = '';
     questionsEl.remove();
     endScreenEl.setAttribute("class", "show");
-    finalScoreEl.textContent = currentScore;
+    finalScoreEl.textContent = currentScore.toFixed(2);
     //Call submit function which will add an event listener, store initials & the score.
     submit();
 }
