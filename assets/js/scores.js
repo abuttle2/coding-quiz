@@ -9,7 +9,11 @@ let highscoresObj = {
 var lastInitials = localStorage.getItem("initials");
 var lastScore = localStorage.getItem("score");
 
-
-
 console.log("Loaded last initials: " + lastInitials);
 console.log("Loaded last score: " + lastScore);
+
+
+
+var clearScores = function () {
+
+}

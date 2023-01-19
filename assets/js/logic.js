@@ -12,24 +12,9 @@ let initialsEl = document.getElementById("initials");
 
 let currentQuestion = 0;
 let timer;
-let timerCount = 3;
+let timerCount = 30;
 
 var answerMessage = '';
-
-// let displaySubmit = function () {
-//     console.log("Function has been called");
-
-//     if (hasEnded) {
-//         //TODO: For the end screen, change the class for this element to be "show" and setup an event listener on the submit button (id = "submit" & is a child of end-screen);
-
-
-//         //TODO: Load highscores page when submit/end-screen button is clicked
-
-//         //TODO: Use local storage to players initial and the score from the quiz
-
-//         //TODO: Add to array of scores in the scores.js???
-//     }
-// }
 
 let startTimer = function () {
     // Sets timer which will call invoke every second
@@ -61,8 +46,7 @@ let submit = function () {
 
     submitBtn.addEventListener("click", function () {
         var userInitials = document.getElementsByTagName("input")[0].value;
-        console.log("X");
-        // TODO: Get the current value of the text box for the players initials once submit has been entered
+
         if (userInitials !== "" && userInitials.length <= 3) {
             //Store in local storage if the input is valid.
             localStorage.setItem("initials", userInitials);
@@ -85,8 +69,6 @@ let submit = function () {
             validationTxt.setAttribute("class", "error");
             endScreenEl.appendChild(validationTxt);
         }
-
-
     });
 }
 
@@ -101,8 +83,6 @@ let endQuiz = function () {
     questionsEl.remove();
     endScreenEl.setAttribute("class", "show");
     finalScoreEl.textContent = currentScore.toFixed(2);
-    //Call submit function which will add an event listener, store initials & the score.
-    submit();
 }
 
 let updateScore = function (isCorrect) {
@@ -122,12 +102,13 @@ let updateScore = function (isCorrect) {
     console.log("Score: " + currentScore.toFixed(2));
 }
 
-
 let displayQuestions = function (questionsArr, questionIndex) {
+
+    console.log(currentQuestion);
+
     var questionIndex = currentQuestion;
     let choiceButtons = [];
     questionsTitleEl.textContent = questionsArr[questionIndex].question;
-    currentQuestion++;
 
     for (let i = 0; i < questionsArr[questionIndex].choices.length; i++) {
         let btnEl = document.createElement("button");
@@ -136,19 +117,17 @@ let displayQuestions = function (questionsArr, questionIndex) {
         choiceButtons.push(btnEl);
 
         btnEl.addEventListener("click", function () {
+            currentQuestion++;
+
             choiceButtons.forEach(function (btnEl) {
                 btnEl.remove();
             });
 
-            if (currentQuestion < questionsArr.length) {
-                displayQuestions(questionsArr, questionIndex);
+            let checkQuestion = function () {
+                if (currentQuestion < questionsArr.length) {
+                    displayQuestions(questionsArr, questionIndex);
+                }
             }
-            else {
-                console.log("Condition met")
-                questionsTitleEl.textContent = '';
-                endQuiz();
-            }
-
             let checkAnswer = function () {
                 //Set attribute to show feedback for answers
                 //Hide after X number of seconds.
@@ -167,11 +146,19 @@ let displayQuestions = function (questionsArr, questionIndex) {
                     answerMessage.textContent = "Wrong!";
                 }
             }
+
+            checkQuestion();
             checkAnswer();
+
+            //Call end quiz function
+            if (currentQuestion >= questionsArr.length || timerCount <= 0) {
+                questionsTitleEl.textContent = '';
+                endQuiz();
+                //Call submit function which will add an event listener, store initials & the score.
+                submit();
+            }
         });
     }
 }
-
 startBtn.addEventListener("click", startQuiz);
-// displaySubmit();
 
