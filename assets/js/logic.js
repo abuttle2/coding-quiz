@@ -13,8 +13,9 @@ let initialsEl = document.getElementById("initials");
 let currentQuestion = 0;
 let timer;
 let timerCount = 30;
-
 var answerMessage = '';
+let currentScore = 0;
+
 
 let startTimer = function () {
     // Sets timer which will call invoke every second
@@ -49,22 +50,26 @@ let submit = function () {
 
         if (userInitials !== "" && userInitials.length <= 3) {
             //Store in local storage if the input is valid.
-            localStorage.setItem("initials", userInitials);
-            localStorage.setItem("score", currentScore);
-            console.log(userInitials);
 
-            //Append text
+            var result = [];
+
+            if (localStorage.getItem("highscores")) {
+                result = JSON.parse(localStorage.getItem("highscores"));
+            }
+
+            result.push({ userInitials: userInitials, currentScore: currentScore });
+            localStorage.setItem("highscores", JSON.stringify(result));
+
+            console.log(result);
+
             validationTxt.textContent = "Data has been submitted!";
             validationTxt.setAttribute("class", "success");
             endScreenEl.appendChild(validationTxt);
 
             setTimeout(function () {
-                validationTxt.textContent = "";
-                //Open the highscores page once submitted
                 window.location.href = 'highscores.html';
             }, 1000);
-        }
-        else {
+        } else {
             validationTxt.textContent = "Please provide valid initials!";
             validationTxt.setAttribute("class", "error");
             endScreenEl.appendChild(validationTxt);
@@ -76,7 +81,6 @@ let endQuiz = function () {
     //Stop timer and set end condition
     timerCount = 0;
     clearInterval(timer);
-
     //Clear on-screen elements
     let timerParEl = document.querySelector(".timer");
     timerParEl.textContent = '';
@@ -88,7 +92,6 @@ let endQuiz = function () {
 let updateScore = function (isCorrect) {
     const correctAudio = document.getElementById("correctAudio");
     const incorrectAudio = document.getElementById("incorrectAudio");
-
     if (isCorrect) {
         console.log("Correct");
         currentScore += 5;
@@ -103,9 +106,6 @@ let updateScore = function (isCorrect) {
 }
 
 let displayQuestions = function (questionsArr, questionIndex) {
-
-    console.log(currentQuestion);
-
     var questionIndex = currentQuestion;
     let choiceButtons = [];
     questionsTitleEl.textContent = questionsArr[questionIndex].question;
@@ -118,11 +118,9 @@ let displayQuestions = function (questionsArr, questionIndex) {
 
         btnEl.addEventListener("click", function () {
             currentQuestion++;
-
             choiceButtons.forEach(function (btnEl) {
                 btnEl.remove();
             });
-
             let checkQuestion = function () {
                 if (currentQuestion < questionsArr.length) {
                     displayQuestions(questionsArr, questionIndex);
@@ -140,16 +138,13 @@ let displayQuestions = function (questionsArr, questionIndex) {
                 if (btnEl.textContent.toLowerCase() == questionsArr[questionIndex].answer.toLowerCase()) {
                     updateScore(true);
                     answerMessage.textContent = "Correct!";
-                }
-                else {
+                } else {
                     updateScore(false);
                     answerMessage.textContent = "Wrong!";
                 }
             }
-
             checkQuestion();
             checkAnswer();
-
             //Call end quiz function
             if (currentQuestion >= questionsArr.length || timerCount <= 0) {
                 questionsTitleEl.textContent = '';

@@ -1,19 +1,31 @@
-let currentScore = 0;
+var displayScores = function () {
+    // //Fetch localStorage variables
 
-let highscoresObj = {
-    initials: [],
-    scores: []
-};
+    let result = [];
+    let resultList = document.getElementById("highscores");
+    let clearBtn = document.getElementById("clear");
 
-//Fetch localStorage variables
-var lastInitials = localStorage.getItem("initials");
-var lastScore = localStorage.getItem("score");
+    if (localStorage.getItem("highscores")) {
+        result = JSON.parse(localStorage.getItem("highscores"));
+    }
+    for (let i = 0; i < result.length; i++) {
+        var score = result[i];
+        let liEl = document.createElement("li");
+        liEl.textContent = score.userInitials + ": " + score.currentScore.toFixed(2);
+        resultList.appendChild(liEl);
+    }
+    clearBtn.addEventListener("click", function () {
+        localStorage.clear();
+        result = [];
+        resultList.remove();
+    });
+    // var lastScore = localStorage.getItem("score");
 
-console.log("Loaded last initials: " + lastInitials);
-console.log("Loaded last score: " + lastScore);
-
-
-
-var clearScores = function () {
-
+    // console.log("Loaded last initials: " + lastInitials);
+    // console.log("Loaded last score: " + lastScore);
 }
+
+displayScores();
+
+
+
