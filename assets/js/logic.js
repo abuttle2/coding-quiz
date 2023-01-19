@@ -16,13 +16,6 @@ let timerCount = 3;
 
 var answerMessage = '';
 
-
-var lastInitials = localStorage.getItem("initials");
-var lastScore = localStorage.getItem("score");
-
-console.log("Loaded last initials: " + lastInitials);
-console.log("Loaded last score: " + lastScore);
-
 // let displaySubmit = function () {
 //     console.log("Function has been called");
 
@@ -71,17 +64,21 @@ let submit = function () {
         console.log("X");
         // TODO: Get the current value of the text box for the players initials once submit has been entered
         if (userInitials !== "" && userInitials.length <= 3) {
+            //Store in local storage if the input is valid.
+            localStorage.setItem("initials", userInitials);
+            localStorage.setItem("score", currentScore);
             console.log(userInitials);
+
+            //Append text
             validationTxt.textContent = "Data has been submitted!";
             validationTxt.setAttribute("class", "success");
             endScreenEl.appendChild(validationTxt);
 
             setTimeout(function () {
                 validationTxt.textContent = "";
+                //Open the highscores page once submitted
+                window.location.href = 'highscores.html';
             }, 1000);
-            //Store in local storage if the input is valid.
-            localStorage.setItem("initials", userInitials);
-            localStorage.setItem("score", currentScore);
         }
         else {
             validationTxt.textContent = "Please provide valid initials!";
