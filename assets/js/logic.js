@@ -8,16 +8,13 @@ let feedbackEl = document.getElementById("feedback");
 let choicesEl = document.getElementById("choices");
 let submitBtn = document.getElementById("submit");
 let timerEl = document.getElementById("time");
+let initialsEl = document.getElementById("initials");
 
 let currentQuestion = 0;
 let timer;
 let timerCount = 3;
 
-const correctAudio = document.getElementById("correctAudio");
-const incorrectAudio = document.getElementById("incorrectAudio");
-
 var answerMessage = '';
-var hasEnded = false;
 
 // let displaySubmit = function () {
 //     console.log("Function has been called");
@@ -59,9 +56,27 @@ let startQuiz = function () {
     feedbackEl.appendChild(answerMessage);
 }
 
+let submit = function () {
+    let errorTxt = document.createElement("p");
+
+    submitBtn.addEventListener("click", function () {
+        var userInitials = document.getElementsByTagName("input")[0].value;
+        console.log("X");
+        // TODO: Get the current value of the text box for the players initials once submit has been entered
+        if (userInitials !== "" && userInitials.length <= 3) {
+            console.log(userInitials);
+            errorTxt.textContent = "";
+        }
+        else {
+            errorTxt.textContent = "Please provide initials";
+            errorTxt.setAttribute("class", "error");
+            endScreenEl.appendChild(errorTxt);
+        }
+    });
+}
+
 let endQuiz = function () {
     //Stop timer and set end condition
-    hasEnded = true;
     timerCount = 0;
     clearInterval(timer);
 
@@ -71,9 +86,14 @@ let endQuiz = function () {
     questionsEl.remove();
     endScreenEl.setAttribute("class", "show");
     finalScoreEl.textContent = currentScore;
+    //Call submit function which will add an event listener, store initials & the score.
+    submit();
 }
 
 let updateScore = function (isCorrect) {
+    const correctAudio = document.getElementById("correctAudio");
+    const incorrectAudio = document.getElementById("incorrectAudio");
+
     if (isCorrect) {
         console.log("Correct");
         currentScore += 5;
@@ -134,8 +154,6 @@ let displayQuestions = function (questionsArr, questionIndex) {
             }
             checkAnswer();
         });
-
-        console.log("Function Called");
     }
 }
 
