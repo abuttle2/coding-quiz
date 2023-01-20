@@ -1,6 +1,4 @@
 var displayScores = function () {
-    // //Fetch localStorage variables
-
     let result = [];
     let resultList = document.getElementById("highscores");
     let clearBtn = document.getElementById("clear");
@@ -9,20 +7,18 @@ var displayScores = function () {
         result = JSON.parse(localStorage.getItem("highscores"));
     }
     for (let i = 0; i < result.length; i++) {
-        var score = result[i];
+        // var score = result[i];
         let liEl = document.createElement("li");
-        liEl.textContent = score.userInitials + ": " + score.currentScore.toFixed(2);
+        liEl.textContent = result[i].userInitials + ": " + result[i].currentScore.toFixed(2);
         resultList.appendChild(liEl);
     }
-    clearBtn.addEventListener("click", function () {
+    //Clear local storage
+    function clearData() {
         localStorage.clear();
         result = [];
         resultList.remove();
-    });
-    // var lastScore = localStorage.getItem("score");
-
-    // console.log("Loaded last initials: " + lastInitials);
-    // console.log("Loaded last score: " + lastScore);
+    }
+    clearBtn.addEventListener("click", clearData);
 }
 
 displayScores();

@@ -16,9 +16,9 @@ let timerCount = 30;
 var answerMessage = '';
 let currentScore = 0;
 
-
+// Sets timer which will call invoke every second
 let startTimer = function () {
-    // Sets timer which will call invoke every second
+
     timer = setInterval(function () {
         timerCount--;
         timerEl.textContent = timerCount;
@@ -29,19 +29,19 @@ let startTimer = function () {
     }, 1000);
 }
 
+// Removes the start screen, sets the current question to 0, starts the timer and displays the first question.
 let startQuiz = function () {
-    //Remove start screen onClick and unhide the questions
     currentQuestion = 0;
     startTimer();
     startScreen.remove();
     questionsEl.setAttribute("class", "show");
     displayQuestions(questions, currentQuestion);
-
     //Create the element which will later be appended with the answer
     answerMessage = document.createElement("p");
     feedbackEl.appendChild(answerMessage);
 }
 
+// Checks if the user has entered valid initials, and stores the score and initials in local storage
 let submit = function () {
     let validationTxt = document.createElement("p");
 
@@ -50,13 +50,10 @@ let submit = function () {
 
         if (userInitials !== "" && userInitials.length <= 3) {
             //Store in local storage if the input is valid.
-
             var result = [];
-
             if (localStorage.getItem("highscores")) {
-                result = JSON.parse(localStorage.getItem("highscores"));
+                var result = JSON.parse(localStorage.getItem("highscores"));
             }
-
             result.push({ userInitials: userInitials, currentScore: currentScore });
             localStorage.setItem("highscores", JSON.stringify(result));
 
@@ -77,11 +74,10 @@ let submit = function () {
     });
 }
 
+//Displays the end screen with the final score, and clears elements
 let endQuiz = function () {
-    //Stop timer and set end condition
     timerCount = 0;
     clearInterval(timer);
-    //Clear on-screen elements
     let timerParEl = document.querySelector(".timer");
     timerParEl.textContent = '';
     questionsEl.remove();
@@ -89,6 +85,7 @@ let endQuiz = function () {
     finalScoreEl.textContent = currentScore.toFixed(2);
 }
 
+//Updates the user's score based on whether the answer is correct or not.
 let updateScore = function (isCorrect) {
     const correctAudio = document.getElementById("correctAudio");
     const incorrectAudio = document.getElementById("incorrectAudio");
@@ -96,15 +93,21 @@ let updateScore = function (isCorrect) {
         console.log("Correct");
         currentScore += 5;
         currentScore += timerCount * 0.15;
+        timerCount += 5;
         correctAudio.play();
     } else {
         console.log("Incorrect");
         currentScore -= 5;
+        timerCount -= 5;
+        if (currentScore < 0) {
+            currentScore = 0;
+        }
         incorrectAudio.play();
     }
     console.log("Score: " + currentScore.toFixed(2));
 }
 
+//Displays the current question and the choices. It takes in two parameters, the questions array and the current question.
 let displayQuestions = function (questionsArr, questionIndex) {
     var questionIndex = currentQuestion;
     let choiceButtons = [];
@@ -128,7 +131,6 @@ let displayQuestions = function (questionsArr, questionIndex) {
             }
             let checkAnswer = function () {
                 //Set attribute to show feedback for answers
-                //Hide after X number of seconds.
                 feedbackEl.setAttribute("class", "feedback");
 
                 setTimeout(function () {
@@ -145,11 +147,11 @@ let displayQuestions = function (questionsArr, questionIndex) {
             }
             checkQuestion();
             checkAnswer();
-            //Call end quiz function
+
+            //Call end functions when the final question is answered or time runs out.
             if (currentQuestion >= questionsArr.length || timerCount <= 0) {
                 questionsTitleEl.textContent = '';
                 endQuiz();
-                //Call submit function which will add an event listener, store initials & the score.
                 submit();
             }
         });
