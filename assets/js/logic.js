@@ -28,7 +28,6 @@ let startTimer = function () {
         }
     }, 1000);
 }
-
 // Removes the start screen, sets the current question to 0, starts the timer and displays the first question.
 let startQuiz = function () {
     currentQuestion = 0;
@@ -40,7 +39,6 @@ let startQuiz = function () {
     answerMessage = document.createElement("p");
     feedbackEl.appendChild(answerMessage);
 }
-
 // Checks if the user has entered valid initials, and stores the score and initials in local storage
 let submit = function () {
     let validationTxt = document.createElement("p");
@@ -56,9 +54,6 @@ let submit = function () {
             }
             result.push({ userInitials: userInitials, currentScore: currentScore });
             localStorage.setItem("highscores", JSON.stringify(result));
-
-            console.log(result);
-
             validationTxt.textContent = "Data has been submitted!";
             validationTxt.setAttribute("class", "success");
             endScreenEl.appendChild(validationTxt);
@@ -73,7 +68,6 @@ let submit = function () {
         }
     });
 }
-
 //Displays the end screen with the final score, and clears elements
 let endQuiz = function () {
     timerCount = 0;
@@ -84,19 +78,16 @@ let endQuiz = function () {
     endScreenEl.setAttribute("class", "show");
     finalScoreEl.textContent = currentScore.toFixed(2);
 }
-
 //Updates the user's score based on whether the answer is correct or not.
 let updateScore = function (isCorrect) {
     const correctAudio = document.getElementById("correctAudio");
     const incorrectAudio = document.getElementById("incorrectAudio");
     if (isCorrect) {
-        console.log("Correct");
         currentScore += 5;
         currentScore += timerCount * 0.15;
         timerCount += 5;
         correctAudio.play();
     } else {
-        console.log("Incorrect");
         currentScore -= 5;
         timerCount -= 5;
         if (currentScore < 0) {
@@ -104,9 +95,7 @@ let updateScore = function (isCorrect) {
         }
         incorrectAudio.play();
     }
-    console.log("Score: " + currentScore.toFixed(2));
 }
-
 //Displays the current question and the choices. It takes in two parameters, the questions array and the current question.
 let displayQuestions = function (questionsArr, questionIndex) {
     var questionIndex = currentQuestion;
@@ -147,12 +136,8 @@ let displayQuestions = function (questionsArr, questionIndex) {
             }
             checkQuestion();
             checkAnswer();
-
-
-
             //Call end functions when the final question is answered or time runs out.
             if (currentQuestion >= questionsArr.length) {
-                console.log("CONDITION MET");
                 questionsTitleEl.textContent = '';
                 endQuiz();
                 submit();
