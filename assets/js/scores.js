@@ -20,7 +20,6 @@ var displayScores = function () {
     }
     clearBtn.addEventListener("click", clearData);
 }
-
 displayScores();
 
 

@@ -12,19 +12,19 @@ let initialsEl = document.getElementById("initials");
 
 let currentQuestion = 0;
 let timer;
-let timerCount = 30;
+let timerCount = 45;
 var answerMessage = '';
 let currentScore = 0;
 
 // Sets timer which will call invoke every second
 let startTimer = function () {
-
     timer = setInterval(function () {
         timerCount--;
         timerEl.textContent = timerCount;
         if (timerCount <= 0) {
             clearInterval(timer);
             endQuiz();
+            submit();
         }
     }, 1000);
 }
@@ -148,8 +148,11 @@ let displayQuestions = function (questionsArr, questionIndex) {
             checkQuestion();
             checkAnswer();
 
+
+
             //Call end functions when the final question is answered or time runs out.
-            if (currentQuestion >= questionsArr.length || timerCount <= 0) {
+            if (currentQuestion >= questionsArr.length) {
+                console.log("CONDITION MET");
                 questionsTitleEl.textContent = '';
                 endQuiz();
                 submit();

@@ -10,7 +10,7 @@ let questions = [
         answer: "3. parentheses"
     },
     {
-        question: "A very useful too used during development and debugging for printing content to the debugger is:",
+        question: "A very useful tool used during development and debugging for printing content to the debugger is:",
         choices: ["1. JavaScript", "2. terminal/bash", "3. for loops", "4. console.log"],
         answer: "4. console.log"
     },
