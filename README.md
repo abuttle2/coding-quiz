@@ -1,4 +1,4 @@
-# coding-quiz
+# javascript-coding-quiz
 
 ## Description
 
